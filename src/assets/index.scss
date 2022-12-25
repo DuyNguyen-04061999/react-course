@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .overlay {
+        z-index: 90;
+        transition: all 0.2s;
+    }
+
+    .content {
+        transition: all 0.2s;
+    }
+    .fade {
+        transition: all 0.2s linear;
+
+        &-enter {
+            .overlay {
+                opacity: 0;
+            }
+
+            &-done {
+                .overlay {
+                    opacity: 0.8;
+                }
+            }
+        }
+
+        &-exit {
+            &-active {
+                .overlay {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+    .zoom {
+        &-enter {
+            .content {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            .overlay {
+                opacity: 0;
+            }
+            &-done {
+                .content {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+                .overlay {
+                    opacity: 0.9;
+                }
+            }
+        }
+
+        &-exit-active {
+            .content {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            .overlay {
+                opacity: 0;
+            }
+        }
+    }
+}
+.ant-message {
+    top: 70px !important;
+    svg {
+        font-size: 24px;
+    }
+
+    &-success {
+        svg {
+            fill: #00afab;
+        }
+    }
+    &-custom-content {
+        @apply flex items-center;
+    }
+}
