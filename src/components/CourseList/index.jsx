@@ -4,21 +4,42 @@ import Skeleton from "../Skeleton";
 import { v4 } from "uuid";
 import { useFetch } from "@/hooks/useFetch";
 import { courseService } from "@/services/course.service";
+import { useQuery } from "@/hooks/useQuery";
+import createArray from "@/utils/createArray";
+import { TEN_SECONDS } from "@/config";
 
 const CourseList = ({ limit = null, related = false, id }) => {
-  const { data: courses, loading } = related
-    ? useFetch(() => courseService.getCourseRelated(id), [id])
-    : useFetch(() => courseService.getCourses(limit));
+  // const { data: courses, loading } = related
+  //   ? useFetch(() => courseService.getCourseRelated(id), [id])
+  //   : useFetch(() => courseService.getCourses(limit));
+
+  const { data: { data: courses = [] } = {}, loading } = related
+    ? useQuery({
+        queryFn: () => courseService.getCourseRelated(id),
+        queryKey: "courses-related",
+        cacheTime: TEN_SECONDS,
+        storeDriver: "sessionStorage",
+      })
+    : limit
+    ? useQuery({
+        queryFn: () => courseService.getCourses(limit),
+        queryKey: "courses-index",
+        cacheTime: TEN_SECONDS,
+        storeDriver: "sessionStorage",
+      })
+    : useQuery({
+        queryFn: () => courseService.getCourses(),
+        queryKey: "courses-list",
+        cacheTime: TEN_SECONDS,
+        storeDriver: "sessionStorage",
+      });
+
   return (
     <>
       <div className="list row">
         {!loading
-          ? courses?.data.map((course) => (
-              <CourseCard key={course.id} {...course} />
-            ))
-          : new Array(6)
-              .fill(null)
-              .map(() => <CourseCardSkeleton key={v4()} />)}
+          ? courses?.map((course) => <CourseCard key={course.id} {...course} />)
+          : createArray(6).map(() => <CourseCardSkeleton key={v4()} />)}
       </div>
     </>
   );

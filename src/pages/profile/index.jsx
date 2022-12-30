@@ -3,14 +3,18 @@ import Field from "@/components/Field";
 import { useAsync } from "@/hooks/useAsync";
 import useAuth from "@/hooks/useAuth";
 import { useForm } from "@/hooks/useForm";
+import useScrollTop from "@/hooks/useScrollTop";
 import { userService } from "@/services/user.service";
 import handleError from "@/utils/handleError";
 import { setUser } from "@/utils/token";
 import { regex, require } from "@/utils/validate";
 import { message } from "antd";
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 
 const MyProfile = () => {
+  const [searchParam] = useSearchParams();
+  useScrollTop(searchParam);
   const { user } = useAuth();
   const { register, form, validate } = useForm({
     name: [require()],

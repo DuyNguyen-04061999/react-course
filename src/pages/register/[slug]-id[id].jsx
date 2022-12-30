@@ -19,7 +19,7 @@ import { useEffect } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 const RegisterCourse = () => {
-  useScrollTop();
+  // useScrollTop();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { user } = useAuth();
@@ -103,7 +103,7 @@ const RegisterCourse = () => {
         </section>
       </main>
     );
-  const { title, money } = course?.data;
+  const { title, money } = course;
 
   // if (!user) {
   //   return <Navigate to={PATH.signin} state={{ redirect: pathname }} />;

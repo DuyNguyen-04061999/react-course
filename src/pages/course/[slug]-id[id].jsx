@@ -13,13 +13,14 @@ import Teacher from "@/components/Teacher";
 import Page404 from "../404";
 import Modal from "@/components/Modal";
 import { useState } from "react";
+
 const CourseDetails = () => {
   const { course, id, loading } = useGetCourseDetails(useParams);
   const [visible, setVisible] = useState(false);
   const onCancel = () => {
     setVisible(false);
   };
-  useScrollTop(id);
+  // useScrollTop(id);
   if (loading)
     return (
       <main className="course-detail" id="main">
@@ -61,20 +62,20 @@ const CourseDetails = () => {
       </main>
     );
 
-  if (!course?.data) return <Page404 />;
+  if (!course) return <Page404 />;
 
-  const { title, long_description, thumbnailUrl, money, slug } = course?.data;
+  const { title, long_description, thumbnailUrl, money, slug } = course;
   const registerPath = generatePath(PATH.courseRegister, {
     slug,
     id,
   });
-  const openingTime = course?.data?.opening_time;
+  const openingTime = course?.opening_time;
   return (
     <main className="course-detail" id="main">
       <section
         className="banner style2"
         style={{
-          "--background": course?.data?.template_color_banner || "#cde6fb",
+          "--background": course?.template_color_banner || "#cde6fb",
         }}
       >
         <div className="container">
@@ -92,7 +93,7 @@ const CourseDetails = () => {
             <Link
               className="btn white round"
               style={{
-                "--color-btn": course?.data?.template_color_btn || "#70b6f1",
+                "--color-btn": course?.template_color_btn || "#70b6f1",
               }}
               to={registerPath}
             >
@@ -136,7 +137,7 @@ const CourseDetails = () => {
           <h3 className="title">nội dung khóa học</h3>
 
           <Accordion.Group>
-            {course?.data?.content?.map((content, id) => (
+            {course?.content?.map((content, id) => (
               <Accordion key={id} date={id + 1} {...content}>
                 {content?.content}
               </Accordion>
@@ -144,7 +145,7 @@ const CourseDetails = () => {
           </Accordion.Group>
           <h3 className="title">yêu cầu cần có</h3>
           <div className="row row-check">
-            {course?.data?.required.map((item) => (
+            {course?.required.map((item) => (
               <div className="col-md-6" key={v4()}>
                 {item?.content}
               </div>
@@ -152,7 +153,7 @@ const CourseDetails = () => {
           </div>
           <h3 className="title">hình thức học</h3>
           <div className="row row-check">
-            {course?.data?.benefits.map((e) => (
+            {course?.benefits.map((e) => (
               <div className="col-md-6" key={v4()}>
                 {e.content}
               </div>
@@ -169,17 +170,17 @@ const CourseDetails = () => {
             <strong>Ngày bắt đầu: </strong>{" "}
             {moment(openingTime).format("DD/MM/YYYY")}
             <br />
-            <strong>Thời gian học: </strong> {course?.data?.schedule}
+            <strong>Thời gian học: </strong> {course?.schedule}
           </p>
           <h3 className="title">Người dạy</h3>
           <div className="teaches">
-            <Teacher {...course?.data?.teacher} />
+            <Teacher {...course?.teacher} />
           </div>
-          {course?.data?.mentor.length > 0 && (
+          {course?.mentor.length > 0 && (
             <>
               <h3 className="title">Người hướng dẫn</h3>
               <div className="teaches">
-                {course?.data?.mentor?.map((e) => (
+                {course?.mentor?.map((e) => (
                   <Teacher {...e} key={v4()} />
                 ))}
               </div>
