@@ -13,7 +13,7 @@ export const useGetCourseDetails = (useParams) => {
     queryFn: () => courseService.getCourseDetails(id),
     queryKey: `course-${id}`,
     storeDriver: "sessionStorage",
-    // dependencyList: [id]
+    // dependencyList: [id],
   });
 
   return { course, id, loading };
