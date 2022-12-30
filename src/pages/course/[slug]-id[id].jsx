@@ -20,7 +20,7 @@ const CourseDetails = () => {
   const onCancel = () => {
     setVisible(false);
   };
-  // useScrollTop(id);
+  useScrollTop(id);
   if (loading)
     return (
       <main className="course-detail" id="main">
