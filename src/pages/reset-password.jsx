@@ -5,7 +5,7 @@ import useAuth from "@/hooks/useAuth";
 import { useForm } from "@/hooks/useForm";
 import { userService } from "@/services/user.service";
 import handleError from "@/utils/handleError";
-import { setToken } from "@/utils/token";
+import { setToken, setUser } from "@/utils/token";
 import { confirm, min, require } from "@/utils/validate";
 import { LoadingOutlined } from "@ant-design/icons";
 import { message } from "antd";
@@ -14,7 +14,7 @@ import { useSearchParams } from "react-router-dom";
 
 const Resetpassword = () => {
   const [searchParam] = useSearchParams();
-  const { getProfile } = useAuth();
+  const { user } = useAuth();
   const [isSuccess, setIsSuccess] = useState(false);
   const code = searchParam.get("code");
 
@@ -58,9 +58,14 @@ const Resetpassword = () => {
     try {
       if (passwordForm.validate()) {
         const res = await resetPasswordService({ ...passwordForm.form, code });
+        console.log("res :>> ", res);
         if (res?.data) {
           setToken(res?.data);
-          getProfile();
+          const user = userService.getProfile();
+          if (user?.data) {
+            setUser(user?.data);
+            message.success("Chúc mừng bạn đã đăng nhập thành công");
+          }
         }
       }
     } catch (err) {
