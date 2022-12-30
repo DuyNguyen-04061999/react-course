@@ -50,17 +50,18 @@ const useQuery = ({
   const cache =
     storeDriver === "localStorage" ? localStorageCache : sessionStorageCache;
   const fetchRef = useRef();
+
   useEffect(() => {
     if (typeof fetchRef.current === "boolean") {
       fetchRef.current = true;
     }
-  }, [dependencyList]);
+  }, [...dependencyList]);
 
   useEffect(() => {
     if (enabled) {
       fetchData();
     }
-  }, [queryKey, enabled].concat(...dependencyList));
+  }, [queryKey, enabled, ...dependencyList]);
 
   const fetchData = async () => {
     try {
@@ -84,7 +85,7 @@ const useQuery = ({
         }
         cache.set(queryKey, res, expire);
       }
-      dependencyList?.length > 0 && (fetchRef.current = false);
+      fetchRef.current = false;
     } catch (error) {
       console.error(error);
       dispatch({ type: SET_ERROR, payload: error });
