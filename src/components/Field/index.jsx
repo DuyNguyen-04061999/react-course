@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 
 const Field = ({
   label,
-  required,
+  required = false,
   renderInput,
   error,
   type = "text",
@@ -39,4 +39,8 @@ export const ErrorText = ({ error }) => {
   );
 };
 
-export default Field;
+export default memo(Field, (prevProps, nextProps) => {
+  return (
+    prevProps.value === nextProps.value && prevProps.error === nextProps.error
+  );
+});

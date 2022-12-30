@@ -1,7 +1,8 @@
-import React, { useId } from "react";
+import React, { useId, useState } from "react";
 import { useRef } from "react";
 import VideoDemo from "@/components/VideoDemo";
 import { useEffect } from "react";
+
 const Demo = () => {
   const videoRef = useRef();
   const onPlay = () => {
@@ -10,12 +11,17 @@ const Demo = () => {
   const onPause = () => {
     videoRef.current.pause();
   };
-
+  const [random, setRandom] = useState();
   const playId = useId();
   const pauseId = useId();
+  useEffect(() => {
+    setInterval(() => {
+      setRandom(Math.random());
+    }, 1000);
+  }, []);
   return (
     <div className="">
-      <VideoDemo ref={videoRef} />
+      <VideoDemo ref={videoRef} random={Math.random()} />
       <div className="ml-32 flex gap-5">
         <button
           id={playId}

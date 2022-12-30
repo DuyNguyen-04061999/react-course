@@ -1,6 +1,9 @@
 import Skeleton from "@/components/Skeleton";
+import { TEN_SECONDS } from "@/config";
 import { PATH } from "@/config/path";
 import { useFetch } from "@/hooks/useFetch";
+import { useQuery } from "@/hooks/useQuery";
+import useScrollTop from "@/hooks/useScrollTop";
 import { courseService } from "@/services/course.service";
 import moment from "moment";
 import React from "react";
@@ -8,8 +11,13 @@ import { generatePath, Link } from "react-router-dom";
 import { v4 } from "uuid";
 
 const MyCourse = () => {
-  const { data, loading } = useFetch(courseService.getMyCourse);
-  console.log("data :>> ", data);
+  // const { data, loading } = useFetch(courseService.getMyCourse);
+
+  const { data: { data = [] } = {} || data, loading } = useQuery({
+    queryFn: () => courseService.getMyCourse(),
+    queryKey: "mycourse",
+    cacheTime: TEN_SECONDS,
+  });
   return (
     <>
       {loading ? (
@@ -44,13 +52,13 @@ const MyCourse = () => {
         </div>
       ) : (
         <div className="tab2">
-          {data?.data?.length === 0 && (
+          {data?.length === 0 && (
             <p>
               Hiện tại bạn chưa đăng ký khóa học nào, vui lòng đăng ký khóa học
               và quay trở lại
             </p>
           )}
-          {data?.data?.map((e) => {
+          {data?.map((e) => {
             const { slug, id } = e.course;
             const pathDetail = generatePath(PATH.courseDetails, {
               slug,
