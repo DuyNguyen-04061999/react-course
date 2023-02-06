@@ -31,6 +31,7 @@ const RegisterCourse = () => {
       navigate(PATH.signin, { state: { redirect: pathname } });
     }
   }, [user]);
+
   const { course, loading, id } = useGetCourseDetails(useParams);
   const { execute: registerCourseService, loading: loadingRegister } = useAsync(
     courseService.registerCourse

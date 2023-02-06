@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
+import { applyMiddleware, combineReducers } from "redux";
 import authReducer from "./authReducer";
 
 // const thunk =
