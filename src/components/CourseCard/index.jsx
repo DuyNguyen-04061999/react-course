@@ -4,7 +4,7 @@ import { generatePath, Link } from "react-router-dom";
 
 const CourseCard = ({ thumbnailUrl, title, short_description, slug, id }) => {
   const path = generatePath(PATH.courseDetails, { slug, id });
-  
+
   const registerPath = generatePath(PATH.courseRegister, { slug, id });
   return (
     <div className="col-md-4 course">

@@ -8,6 +8,7 @@ import { useEffect } from "react";
 //     label: "",
 //   },
 // ];
+
 const MySelect = ({ options, placeholder, onChange }) => {
   const [label, setLabel] = useState(placeholder);
   const { show, setShow, onToggle } = useToggle();
@@ -15,6 +16,7 @@ const MySelect = ({ options, placeholder, onChange }) => {
     e.stopPropagation();
     onToggle();
   };
+
   useEffect(() => {
     const onClose = () => {
       setShow(false);
@@ -33,20 +35,19 @@ const MySelect = ({ options, placeholder, onChange }) => {
     setLabel(options[index].label);
   };
   return (
-    <>
-      <div className="select">
-        <div className="head" onClick={onOpen}>
-          {label}
-        </div>
-        <div className="sub" style={{ display: show ? "block" : "none" }}>
-          {options.map((option, id) => (
-            <a href="#" key={option.value} onClick={_onChange(id)}>
-              {option.label}
-            </a>
-          ))}
-        </div>
+    <div className="select">
+      <div className="head" onClick={onOpen}>
+        {label}
       </div>
-    </>
+      
+      <div className="sub" style={{ display: show ? "block" : "none" }}>
+        {options.map((option, id) => (
+          <a href="#" key={option.value} onClick={_onChange(id)}>
+            {option.label}
+          </a>
+        ))}
+      </div>
+    </div>
   );
 };
 

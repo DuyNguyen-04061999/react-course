@@ -14,7 +14,6 @@ import { useSearchParams } from "react-router-dom";
 
 const Resetpassword = () => {
   const [searchParam] = useSearchParams();
-  const { user } = useAuth();
   const [isSuccess, setIsSuccess] = useState(false);
   const code = searchParam.get("code");
 

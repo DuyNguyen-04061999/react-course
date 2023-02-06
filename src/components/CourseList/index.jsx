@@ -9,10 +9,6 @@ import createArray from "@/utils/createArray";
 import { TEN_SECONDS } from "@/config";
 
 const CourseList = ({ limit = null, related = false, id }) => {
-  // const { data: courses, loading } = related
-  //   ? useFetch(() => courseService.getCourseRelated(id), [id])
-  //   : useFetch(() => courseService.getCourses(limit));
-
   const { data: { data: courses = [] } = {}, loading } = related
     ? useQuery({
         queryFn: () => courseService.getCourseRelated(id),

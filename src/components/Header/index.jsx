@@ -2,8 +2,6 @@ import { avatarDefault } from "@/config";
 import { PATH } from "@/config/path";
 import useAuth from "@/hooks/useAuth";
 import { onLogOut } from "@/stores/authReducer";
-import { clearToken, clearUser } from "@/utils/token";
-import { message } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
@@ -21,6 +19,7 @@ const Header = () => {
   const closeMenu = () => {
     document.body.classList.remove("menu-is-show");
   };
+
   useEffect(() => {
     closeMenu();
     setVisible(false);

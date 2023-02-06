@@ -10,19 +10,21 @@ const Context = createContext({ activeAccordion: -1 });
 
 const ContentWrap = styled.div`
   overflow: hidden;
-  /* height: ${({ height }) => height + "px"}; */
   transition: height 0.2s ease-in-out;
 `;
 
 export const Accordion = ({ date, title, children, index }) => {
   const { onActive, activeAccordion } = useContext(Context);
+
   const [contentHeight, setContentHeight] = useState(0);
+
   const active = activeAccordion === index;
 
   const _onClick = () => {
     onActive(index);
   };
   const contentRef = useRef();
+
   useEffect(() => {
     setContentHeight(contentRef?.current?.scrollHeight);
   }, [active]);

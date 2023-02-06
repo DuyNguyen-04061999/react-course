@@ -5,7 +5,7 @@ import { PATH } from "@/config/path";
 import { useGetCourseDetails } from "@/hooks/useGetCourseDetails";
 import useScrollTop from "@/hooks/useScrollTop";
 import { formatNumber } from "@/utils/currency";
-import React from "react";
+import React, { useMemo } from "react";
 import { generatePath, Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { v4 } from "uuid";
@@ -13,14 +13,35 @@ import Teacher from "@/components/Teacher";
 import Page404 from "../404";
 import Modal from "@/components/Modal";
 import { useState } from "react";
+import { useQuery } from "@/hooks/useQuery";
+import { courseService } from "@/services/course.service";
 
 const CourseDetails = () => {
-  const { course, id, loading } = useGetCourseDetails(useParams);
+  // const { course, id, loading } = useGetCourseDetails(useParams);
+  const { id } = useParams();
+  const { data: { data: course = {} } = {}, loading } = useQuery({
+    queryFn: () => courseService.getCourseDetails(id),
+    queryKey: `course-${id}`,
+    storeDriver: "sessionStorage",
+  });
+
   const [visible, setVisible] = useState(false);
   const onCancel = () => {
     setVisible(false);
   };
   useScrollTop(id);
+
+  const { registerPath } = useMemo(() => {
+    if (Object.keys(course)?.length > 0) {
+      const registerPath = generatePath(PATH.courseRegister, {
+        slug: course?.slug,
+        id,
+      });
+      return { registerPath };
+    }
+
+    return {};
+  }, [course]);
   if (loading)
     return (
       <main className="course-detail" id="main">
@@ -64,12 +85,6 @@ const CourseDetails = () => {
 
   if (!course) return <Page404 />;
 
-  const { title, long_description, thumbnailUrl, money, slug } = course;
-  const registerPath = generatePath(PATH.courseRegister, {
-    slug,
-    id,
-  });
-  const openingTime = course?.opening_time;
   return (
     <main className="course-detail" id="main">
       <section
@@ -80,11 +95,11 @@ const CourseDetails = () => {
       >
         <div className="container">
           <div className="info">
-            <h1>{title}</h1>
+            <h1>{course?.title}</h1>
             <div className="row">
               <div className="date">
                 <strong>Khai giảng:</strong>{" "}
-                {moment(openingTime).format("DD/MM/YYYY")}
+                {moment(course?.opening_time).format("DD/MM/YYYY")}
               </div>
               <div className="time">
                 <strong>Thời lượng:</strong> 18 buổi
@@ -123,16 +138,16 @@ const CourseDetails = () => {
                 className="h-full w-full"
               ></iframe>
             </Modal>
-            <div className="money">{formatNumber(money)}</div>
+            <div className="money">{formatNumber(course?.money)}</div>
           </div>
         </div>
       </section>
       <section className="section-2">
         <div className="container">
-          <p className="des">{long_description}</p>
+          <p className="des">{course?.long_description}</p>
           <h2 className="title">giới thiệu về khóa học</h2>
           <div className="cover">
-            <img src={thumbnailUrl} alt="" />
+            <img src={course?.thumbnailUrl} alt="" />
           </div>
           <h3 className="title">nội dung khóa học</h3>
 
@@ -143,6 +158,7 @@ const CourseDetails = () => {
               </Accordion>
             ))}
           </Accordion.Group>
+
           <h3 className="title">yêu cầu cần có</h3>
           <div className="row row-check">
             {course?.required.map((item) => (
@@ -168,7 +184,7 @@ const CourseDetails = () => {
           </h3>
           <p>
             <strong>Ngày bắt đầu: </strong>{" "}
-            {moment(openingTime).format("DD/MM/YYYY")}
+            {moment(course?.opening_time).format("DD/MM/YYYY")}
             <br />
             <strong>Thời gian học: </strong> {course?.schedule}
           </p>

@@ -66,6 +66,7 @@ const useQuery = ({
   const fetchData = async () => {
     try {
       dispatch({ type: SET_STATUS, payload: "pending" });
+      dispatch({ type: SET_LOADING, payload: true });
       let res;
       if (queryKey && !fetchRef.current) {
         res = cache.get(queryKey);
@@ -74,7 +75,6 @@ const useQuery = ({
       if (!res) {
         res = await queryFn();
       }
-
       dispatch({ type: SET_DATA, payload: res });
       dispatch({ type: SET_STATUS, payload: "success" });
       onSuccess?.(res);
