@@ -8,10 +8,10 @@ export const useForm = (rules, initialForm = {}) => {
 
   const onChange = (e, name, disabled) => {
     const _form = { ...form, [name]: e.target.value };
-    if (rules[name]) {
+    if (Array.isArray(rules[name]) && rules[name].length > 0) {
       const errObj = validate({ [name]: rules[name] }, _form);
 
-      setError((error) => ({ ...error, [name]: errObj[name] || "" }));
+      setError((error) => ({ ...error, [name]: "" }));
     }
 
     setForm((form) => ({ ...form, [name]: e.target.value }));

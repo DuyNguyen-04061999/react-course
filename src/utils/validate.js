@@ -31,6 +31,11 @@ export const validate = (rules = {}, form = {}) => {
       }
 
       if (typeof form[name] !== "boolean" && form[name]?.trim()) {
+        if (typeof rule === "function") {
+          const message = rule(form, form[name]);
+          message && (errObj[name] = message);
+        }
+
         if (rule.regex) {
           let regexp = rule.regex;
 
